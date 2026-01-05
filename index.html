@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Localização em Tempo Real</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <style>
+        body { font-family: sans-serif; text-align: center; padding: 20px; background: #f0f2f5; }
+        #map { height: 400px; width: 100%; max-width: 600px; margin: 20px auto; display: none; border-radius: 12px; }
+        .btn { background: #28a745; color: white; border: none; padding: 15px 30px; border-radius: 8px; cursor: pointer; font-size: 18px; }
+    </style>
+</head>
+<body>
+
+    <h2>Rastreador de IP e GPS</h2>
+    <p id="status">Clique abaixo para iniciar</p>
+    <button class="btn" onclick="pegarLocalizacao()">Ver Minha Localização</button>
+
+    <div id="map"></div>
+    <p id="coordenadas"></p>
+
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+    <script>
+        let mapa;
+        let marcador;
+
+        function pegarLocalizacao() {
+            console.log("Iniciando captura...");
+            const status = document.getElementById('status');
+
+            if (!navigator.geolocation) {
+                alert("Seu navegador não suporta geolocalização.");
+                return;
+            }
+
+            status.innerText = "Buscando GPS...";
+
+            navigator.geolocation.getCurrentPosition(
+                (pos) => {
+                    const { latitude, longitude } = pos.coords;
+                    status.innerText = "Localização encontrada!";
+                    
+                    exibirMapa(latitude, longitude);
+                    enviarDados(latitude, longitude);
+                },
+                (erro) => {
+                    alert("Erro ao obter GPS: " + erro.message);
+                    status.innerText = "Acesso negado.";
+                },
+                { enableHighAccuracy: true }
+            );
+        }
+
+        function exibirMapa(lat, lon) {
+            const divMapa = document.getElementById('map');
+            divMapa.style.display = "block";
+            document.getElementById('coordenadas').innerText = `Lat: ${lat}, Lon: ${lon}`;
+
+            if (!mapa) {
+                mapa = L.map('map').setView([lat, lon], 16);
+                L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(mapa);
+                marcador = L.marker([lat, lon]).addTo(mapa);
+            } else {
+                mapa.setView([lat, lon], 16);
+                marcador.setLatLng([lat, lon]);
+            }
+        }
+
+        function enviarDados(lat, lon) {
+            fetch('/track', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ lat, lon })
+            })
+            .then(res => res.json())
+            .then(dados => {
+                document.getElementById('coordenadas').innerHTML += `<br>Seu IP: ${dados.seuIP}`;
+            })
+            .catch(err => console.error("Erro ao enviar para o servidor:", err));
+        }
+    </script>
+</body>
+</html>
