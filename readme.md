@@ -1,62 +1,23 @@
-📍 GPS & IP Tracker (Node.js)
-Este é um projeto simples em Node.js que captura a localização exata via GPS e o endereço IPv4 de um usuário através de um link seguro, exibindo os dados em um mapa interativo em tempo real.
+# 📍 Real-Time Location & IP Tracker
 
-🚀 Funcionalidades
-Captura de coordenadas (Latitude e Longitude) com alta precisão.
+Este é um projeto simples utilizando **Node.js** e **Leaflet.js** para capturar a localização geográfica (GPS) e o endereço IPv4 de um usuário através de um link seguro.
 
-Identificação do endereço IPv4 real (mesmo atrás de proxies/Ngrok).
+## 🚀 Funcionalidades
 
-Visualização instantânea em mapa usando Leaflet.js.
+* **Geolocalização de Alta Precisão:** Captura Latitude e Longitude via API do Navegador.
+* **Mapa Interativo:** Exibe a posição exata do usuário em um mapa usando Leaflet e OpenStreetMap.
+* **Captura de IPv4:** Identifica o endereço IP real do visitante (com suporte a headers de proxy/Ngrok).
+* **Log de Acessos:** Salva automaticamente os dados capturados em um arquivo `acessos.txt` no servidor.
 
-Registro automático de acessos em um arquivo local (acessos.txt).
+## 🛠️ Tecnologias Utilizadas
 
-🛠️ Pré-requisitos
-Node.js instalado.
+* [Node.js](https://nodejs.org/) - Ambiente de execução Javascript.
+* [Express](https://expressjs.com/) - Framework web para o servidor.
+* [Leaflet.js](https://leafletjs.com/) - Biblioteca para mapas interativos.
+* [Ngrok](https://ngrok.com/) - Para expor o servidor local para a internet (HTTPS).
 
-Ngrok (para gerar o link público HTTPS).
+## 📋 Pré-requisitos
 
-📥 Instalação
-Clone ou baixe este repositório.
-
-Abra o terminal na pasta do projeto e instale as dependências:
-
-Bash
-
-npm install express
-📂 Estrutura de Pastas
-Plaintext
-
-/getLocation
-├── server.js          # Servidor Node.js (Backend)
-├── acessos.txt        # Log onde os dados serão salvos
-└── /public
-    └── index.html     # Interface do usuário (Frontend)
-    
-📖 Como Usar
-1. Iniciar o Servidor Local
-No terminal, execute o comando:
-
-Bash
-
-node server.js
-O servidor estará rodando em: http://localhost:3000
-
-2. Tornar o Link Público (Ngrok)
-Como o GPS exige uma conexão segura (HTTPS), abra outro terminal e digite:
-
-Bash
-
-ngrok http 3000
-Copie o link gerado (ex: https://abcd-123.ngrok-free.app).
-
-3. Capturar a Localização
-Envie o link do Ngrok para o dispositivo alvo.
-
-Ao clicar no botão "Ver Minha Localização", o dispositivo pedirá permissão de GPS.
-
-Após a permissão, o mapa será exibido para o usuário e os dados aparecerão no seu terminal Node.js.
-
-⚠️ Observações de Segurança
-HTTPS: A geolocalização não funciona em links http:// comuns (exceto localhost). Use sempre o link https:// do Ngrok.
-
-Permissões: O navegador sempre solicitará permissão ao usuário. Não é possível capturar o GPS sem o consentimento explícito por questões de privacidade do navegador.
+Antes de começar, você precisará ter instalado em sua máquina:
+* [Node.js](https://nodejs.org/en/download/)
+* [NPM](https://www.npmjs.com/) (instalado automaticamente com o Node)
